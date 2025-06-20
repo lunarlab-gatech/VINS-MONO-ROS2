@@ -5,12 +5,21 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 
 def generate_launch_description():
+    
+    config_path_arg = DeclareLaunchArgument(
+        'config_path',
+        default_value=PathJoinSubstitution([
+            get_package_share_directory('config_pkg'),
+            'config/euroc/euroc_config.yaml'
+        ]),
+        description='Full path to the config YAML file'
+    )
 
     config_pkg_path = get_package_share_directory('config_pkg')
 
     config_path = PathJoinSubstitution([
         config_pkg_path,
-        'config/euroc/euroc_config.yaml'
+        LaunchConfiguration('config_path')
     ])
 
 
@@ -46,6 +55,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        config_path_arg,
         LogInfo(msg=['[feature tracker launch] config path: ', config_path]),
         feature_tracker_node,
         rviz_node

@@ -6,11 +6,20 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
+    config_path_arg = DeclareLaunchArgument(
+        'config_path',
+        default_value=PathJoinSubstitution([
+            get_package_share_directory('config_pkg'),
+            'config/euroc/euroc_config.yaml'
+        ]),
+        description='Full path to the config YAML file'
+    )
+
     config_pkg_path = get_package_share_directory('config_pkg')
 
     config_path = PathJoinSubstitution([
         config_pkg_path,
-        'config/euroc/euroc_config.yaml'
+        LaunchConfiguration('config_path')
     ])
 
     vins_path = PathJoinSubstitution([
@@ -55,6 +64,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        config_path_arg,
         LogInfo(msg=['[vins estimator launch] config path: ', config_path]),
         LogInfo(msg=['[vins estimator launch] vins path: ', vins_path]),
         LogInfo(msg=['[vins estimator launch] support path: ', support_path]),

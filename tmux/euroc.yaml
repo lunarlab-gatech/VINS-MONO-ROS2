@@ -1,0 +1,29 @@
+session_name: vins_mono
+
+environment:
+  ROS_DIR: '/opt/ros/foxy'
+  DATA_DIR: '/home/dbutterfield3/data/EuRoC_datasets'
+  ROS_WS: '/home/dbutterfield3/vins_mono_ws'
+
+options:
+  default-command: /bin/bash
+
+windows:
+- window_name: main
+  layout: tiled
+  focus: true
+  shell_command_before:
+  - source $ROS_DIR/setup.bash
+  - source $ROS_WS/install/setup.bash
+  panes:
+  - shell_command:
+    - ros2 launch feature_tracker vins_feature_tracker.launch.py
+  - shell_command:
+    - ros2 launch vins_estimator euroc.launch.py
+  - shell_command:
+    - ros2 bag play $DATA_DIR/MH_01_easy_foxy
+
+- window_name: kill
+  layout: tiled
+  panes:
+  - echo "tmux kill-session -t vins_mono"

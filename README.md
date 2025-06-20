@@ -23,26 +23,56 @@ This repository implements the ROS2 version of VINS-MONO, mainly including the f
   * [Ceres Solver](http://ceres-solver.org/installation.html) 1.14.0
   * Eigen 3.3.7
 # 3. Build VINS-MONO-ROS2
-Clone the repository and colcon build:  
+
+## Docker Setup
+Make sure to install:
+- [Docker](https://docs.docker.com/engine/install/ubuntu/)
+
+Then, clone this repository in a ROS2 workspace at a desired location on your computer.
+
+After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `DOCKERFILE` to update these lines:
+- `ARG USERNAME=`: Your username
+- `ARG USER_UID=`: Output of `echo $UID`
+- `ARG USER_GID=`: Output of `id -g`
+
+Edit the `enter_container.sh` script with the following paths:
+- `DATA_DIR=`: The directory where the any datasets are located
+- `ROS_WS_DIR=`: The directory of the ros workspace this repository is a part of
+
+Now, run the following commands:
 ```
-cd $(PATH_TO_YOUR_ROS2_WS)/src
-git clone https://github.com/dongbo19/VINS-MONO-ROS2.git
-cd ..
+build_container.sh
+run_container.sh
+```
+
+The rest of this README **assumes that you are inside the Docker container**. For easier debugging and use, its highly recommended to install the [VSCode Docker extension](https://code.visualstudio.com/docs/containers/overview), which allows you to start/stop the container and additionally attach VSCode to the container by right-clicking on the container and selecting `Attach Visual Studio Code`.
+
+
+# Build
+Next navigate to the root of your ROS workspace, and run the following commands:
+```
 colcon build
 ```
+
+# Support Files install
+Run the following command in the root of your ROS workspace to install support files from the original VINS-Mono:
+```
+git clone git@github.com:HKUST-Aerial-Robotics/VINS-Mono.git
+```
+
 # 4. VINS-MONO-ROS2 on EuRoC datasets
 ## 4.1. ROS1 bag to ROS2 bag
 Download [EuRoC datasets](https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets). However, the datasets are in ROS1 format. To run the code in ROS2, we need to first convert these datasets to ROS2 format. We can use [rosbags](https://pypi.org/project/rosbags/) for this purpose, which can convert ROS built-in messages between ROS1 and ROS2.  
 ## 4.2. Visual-inertial odometry and loop closure
 All configuration files are in the package, **_config_pkg_**, so in launch files, the path to the EuRoC configuration files is found using **_get_package_share_directory('config_pkg')_**.  
-Open three terminals, launch the feature_tracker, vins_estimator, rviz2, and ros2 bag. Take the MH01 for example
+
+Then, navigate to this repositories folder and run the following command:
 ```
-ros2 launch feature_tracker vins_feature_tracker.launch.py              # for feature tracking and rviz2
-ros2 launch vins_estimator euroc.launch.py                              # for backend optimization and loop closure
-ros2 bag play $(PATH_TO_YOUR_DATASET)/MH_01_easy                        # for ros2 bag
+tmuxp load tmux/euroc.yaml
 ```
 ![mh05](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_mh05.gif)
 ![v101](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_v101.gif)
+
 ## 4.3. Visualize ground truch
 First, take the MH01 for example, modifying the **'sequence_name'** in the launch file: 
 **_benchmark_publisher/launch/benchmark_publisher.launch.py_**
@@ -55,15 +85,13 @@ sequence_name_arg = DeclareLaunchArgument(
 sequence_name = LaunchConfiguration('sequence_name')
 ```
 **PS: After modifying the launch file, don't forget to run **_colcon build_** for this package again.**  
-Then, open four terminals, launch the feature_tracker, vins_estimator, benchmark_mark, rviz2, and ros2 bag.
+Then, run the following command:
 ```
-ros2 launch feature_tracker vins_feature_tracker.launch.py            # for feature tracking and rviz2
-ros2 launch vins_estimator euroc.launch.py                            # for backend optimization and loop closure
-ros2 launch benchmark_publisher benchmark_publisher.launch.py         # for benchmark
-ros2 bag play $(PATH_TO_YOUR_DATASET)/MH_01_easy                      # for ros2 bag
+tmuxp load tmux/euroc_w_benchmark.yaml
 ```
 ![mh01_benchmark](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_benchmark_mh01.gif)
 ![mh02_benchmark](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_benchmark_mh02.gif)
+
 ## 4.4. AR Demo
 Download the [bag file](https://www.dropbox.com/scl/fi/q18lot4bfs1fqrctclz7b/ar_box.bag?rlkey=16yrxnwnt2fcutwwzwhlevd1n&e=1&dl=0).  
 Then open two terminals  

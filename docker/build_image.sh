@@ -1,0 +1,1 @@
+docker build -t vins_mono_ros .
