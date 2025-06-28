@@ -17,10 +17,10 @@ windows:
   - source $ROS_WS/install/setup.bash
   panes:
   - shell_command:
-    - ros2 launch feature_tracker vins_feature_tracker.launch.py config_path:=config/hercules_husky/hercules_husky_config.yaml
+    - ros2 launch feature_tracker vins_feature_tracker.launch.py config_path:=config/hercules/husky.yaml
   - shell_command:
     - export RCL_LOG_LEVEL=DEBUG
-    - ros2 launch vins_estimator euroc.launch.py config_path:=config/hercules_husky/hercules_husky_config.yaml
+    - ros2 launch vins_estimator euroc.launch.py config_path:=config/hercules/husky.yaml
   - shell_command:
     - ros2 bag play $DATA_DIR/ausenv_test1_checkpoints_CSLAM_2UAVUGV_pruned -r 5.0 --topics /hercules_node/Husky1/imu/imu /hercules_node/Husky1/front_center_Scene/image /hercules_node/Husky1/front_center_Scene/camera_info /tf /tf_static
   -

@@ -1,0 +1,31 @@
+session_name: vins_mono
+
+environment:
+  ROS_DIR: '/opt/ros/foxy'
+  DATA_DIR: '/home/dbutterfield3/data/hercules_datasets/V1.2.1'
+  ROS_WS: '/home/dbutterfield3/vins_mono_ws'
+
+options:
+  default-command: /bin/bash
+
+windows:
+- window_name: main
+  layout: tiled
+  focus: true
+  shell_command_before:
+  - source $ROS_DIR/setup.bash
+  - source $ROS_WS/install/setup.bash
+  panes:
+  - shell_command:
+    - ros2 launch feature_tracker vins_feature_tracker.launch.py config_path:=config/hercules/drone.yaml
+  - shell_command:
+    - export RCL_LOG_LEVEL=DEBUG
+    - ros2 launch vins_estimator euroc.launch.py config_path:=config/hercules/drone.yaml
+  - shell_command:
+    - ros2 bag play $DATA_DIR/UAV1x_camimu_calibration_test1 -r 2.5 --topics /hercules_node/Drone1/imu/imu /hercules_node/Drone1/front_center_Scene/image /tf /tf_static /hercules_node/Drone1/front_center_Scene/camera_info
+  -
+
+- window_name: kill
+  layout: tiled
+  panes:
+  - echo "tmux kill-session -t vins_mono"
