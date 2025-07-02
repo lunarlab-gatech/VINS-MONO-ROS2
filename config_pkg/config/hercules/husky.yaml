@@ -1,9 +1,9 @@
 %YAML:1.0
 
 #common parameters
-imu_topic: "/hercules_node/Husky1/imu/imu"
-image_topic: "/hercules_node/Husky1/front_center_Scene/image"
-output_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/husky"
+imu_topic: "/VINS/Husky1/imu"
+image_topic: "/VINS/Husky1/front_center_Scene/image_greyscale"
+output_path: "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/VINS-MONO-ROS2/output/hercules/husky1"
 
 #camera calibration 
 model_type: PINHOLE
@@ -44,7 +44,7 @@ extrinsicTranslation: !!opencv-matrix
 #feature traker paprameters
 max_cnt: 150            # max feature number in feature tracking
 min_dist: 30            # min distance between two features 
-freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
+freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as that of raw image 
 F_threshold: 1.0        # ransac threshold (pixel)
 show_track: 1           # publish tracking image as topic
 equalize: 0             # if image is too dark or light, turn on equalize to find enough features
@@ -73,8 +73,8 @@ g_norm: 9.81007     # gravity magnitude
 loop_closure: 1                    # start loop closure
 load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
 fast_relocalization: 0             # useful in real-time and large project
-pose_graph_save_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/husky/pose_graph/" # save and load path
-support_path: "/home/dbutterfield3/VINS-Mono/support_files"
+pose_graph_save_path: "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/VINS-MONO-ROS2/output/hercules/husky1/pose_graph" # save and load path
+support_path: "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/VINS-MONO-ROS2/output/hercules/husky1/"
 
 #unsynchronization parameters
 estimate_td: 0                      # online estimate time offset between camera and imu
