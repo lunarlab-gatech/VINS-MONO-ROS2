@@ -92,4 +92,7 @@ RUN sudo apt install ros-foxy-rqt-graph ros-foxy-rviz-imu-plugin -y
 RUN echo "source /opt/ros/foxy/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Install Boost & image_transport
-RUN sudo apt install libboost-all-dev ros-foxy-image-transport ros-foxy-cv-bridge ros-foxy-rviz2
+RUN sudo apt install libboost-all-dev ros-foxy-image-transport ros-foxy-cv-bridge ros-foxy-rviz2 -y
+
+# Install additional plugins for rqt
+RUN sudo apt install ros-foxy-rqt-* -y
