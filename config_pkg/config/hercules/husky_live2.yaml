@@ -1,8 +1,8 @@
 %YAML:1.0
 
 #common parameters
-imu_topic: "/VINS/Husky1/imu"
-image_topic: "/VINS/Husky1/front_center_Scene/image_greyscale"
+imu_topic: "/imu"
+image_topic: "/camera/color/image_raw"
 output_path: "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/VINS-MONO-ROS2/output/hercules/husky1"
 
 #camera calibration 
@@ -26,25 +26,25 @@ estimate_extrinsic: 0   # 0  Have an accurate extrinsic parameters. We will trus
                         # 1  Have an initial guess about extrinsic parameters. We will optimize around your initial guess.
                         # 2  Don't know anything about extrinsic parameters. You don't need to give R,T. We will try to calibrate it. Do some rotation movement at beginning.                        
 #If you choose 0 or 1, you should write down the following matrix.
-#Rotation from camera frame to imu frame, imu^R_cam
+#Rotation from camera frame to imu frame, imu^R_cam, NED below
 extrinsicRotation: !!opencv-matrix
    rows: 3
    cols: 3
    dt: d
    data: [0,  0, 1,
-         -1,  0, 0,
-          0, -1, 0]
+         1,  0, 0,
+          0, 1, 0]
 #Translation from camera frame to imu frame, imu^T_cam
 extrinsicTranslation: !!opencv-matrix
    rows: 3
    cols: 1
    dt: d
-   data: [0,0,0.35]
+   data: [0,0,0]
 
 #feature traker paprameters
 max_cnt: 150            # max feature number in feature tracking
 min_dist: 30            # min distance between two features 
-freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as that of raw image 
+freq: 20                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as that of raw image 
 F_threshold: 1.0        # ransac threshold (pixel)
 show_track: 1           # publish tracking image as topic
 equalize: 0             # if image is too dark or light, turn on equalize to find enough features

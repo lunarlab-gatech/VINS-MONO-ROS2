@@ -1,8 +1,8 @@
 %YAML:1.0
 
 #common parameters
-imu_topic: "/VINS/Husky1/imu"
-image_topic: "/VINS/Husky1/front_center_Scene/image_greyscale"
+imu_topic: "/imu"
+image_topic: "/camera/color/image_raw"
 output_path: "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/VINS-MONO-ROS2/output/hercules/husky1"
 
 #camera calibration 
@@ -44,15 +44,15 @@ extrinsicTranslation: !!opencv-matrix
 #feature traker paprameters
 max_cnt: 150            # max feature number in feature tracking
 min_dist: 30            # min distance between two features 
-freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as that of raw image 
+freq: 40                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as that of raw image 
 F_threshold: 1.0        # ransac threshold (pixel)
 show_track: 1           # publish tracking image as topic
 equalize: 0             # if image is too dark or light, turn on equalize to find enough features
 fisheye: 0              # if using fisheye, turn it on. A circle mask will be loaded to remove edge noisy points
 
 #optimization parameters
-max_solver_time: 0.04  # max solver itration time (ms), to guarantee real time
-max_num_iterations: 8   # max solver itrations, to guarantee real time
+max_solver_time: 0.08  # max solver itration time (ms), to guarantee real time
+max_num_iterations: 12   # max solver itrations, to guarantee real time
 keyframe_parallax: 10.0 # keyframe selection threshold (pixel)
 
 #imu parameters       The more accurate parameters you provide, the better performance
