@@ -238,7 +238,7 @@ void vio_callback(const nav_msgs::msg::Odometry::ConstPtr pose_msg)
     key_odometrys.type = visualization_msgs::msg::Marker::SPHERE_LIST;
     key_odometrys.action = visualization_msgs::msg::Marker::ADD;
     key_odometrys.pose.orientation.w = 1.0;
-    key_odometrys.lifetime = rclcpp::Duration(0);
+    key_odometrys.lifetime = rclcpp::Duration(0, 0);
 
     //static int key_odometrys_id = 0;
     key_odometrys.id = 0; //key_odometrys_id++;

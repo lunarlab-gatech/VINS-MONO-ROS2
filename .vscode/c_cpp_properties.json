@@ -1,0 +1,36 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/octomap_server/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/octomap_rviz_plugins/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/octomap_ros/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/imu_filter_madgwick/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/imu_complementary_filter/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/camera_model/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/airsim_ros_pkgs/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/install/airsim_interfaces/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/VINS-MONO-ROS2/camera_model/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/airsim_ros_pkgs/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/hercules-ros2/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/imu_tools/imu_complementary_filter/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/imu_tools/imu_filter_madgwick/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/octomap_mapping/octomap_server/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/octomap_ros/include/**",
+        "/home/sgarimella34/multi-robot-coordination/Cosys-AirSim/ros2/src/octomap_rviz_plugins/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

@@ -8,7 +8,7 @@
 #include <sensor_msgs/image_encodings.hpp>
 #include <sensor_msgs/msg/point_cloud.hpp>
 #include <cv_bridge/cv_bridge.h>
-#include <image_transport/image_transport.h>
+#include <image_transport/image_transport.hpp>
 #include <cmath>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -68,7 +68,7 @@ void axis_generate(visualization_msgs::msg::Marker &line_list, Vector3d &origin,
     line_list.type = visualization_msgs::msg::Marker::LINE_LIST;
     line_list.scale.x = 0.1;
     line_list.color.a = 1.0;
-    line_list.lifetime = rclcpp::Duration(0);
+    line_list.lifetime = rclcpp::Duration(0, 0); // infinite
     
     line_list.pose.orientation.w = 1.0;
     line_list.color.b = 1.0;
@@ -124,7 +124,7 @@ void cube_generate(visualization_msgs::msg::Marker &marker, Vector3d &origin, in
     marker.color.b = 0.0f;
     marker.color.a = 1.0;
 
-    marker.lifetime = rclcpp::Duration(0);  
+    marker.lifetime = rclcpp::Duration(0, 0); // 
     geometry_msgs::msg::Point p;
     p.x = origin.x();
     p.y = origin.y();
@@ -348,7 +348,7 @@ void draw_object(cv::Mat &AR_image)
     }
 }
 
-void callback(const sensor_msgs::msg::Image::SharedPtr img_msg, const nav_msgs::msg::Odometry::ConstPtr pose_msg)
+void callback(const sensor_msgs::msg::Image::SharedPtr img_msg, const std::shared_ptr<const nav_msgs::msg::Odometry> pose_msg)
 {
     //throw the first few unstable pose
     if(img_cnt < 50)
