@@ -55,7 +55,7 @@ colcon build
 ```
 
 # Support Files install
-Run the following command in the root of your ROS workspace to install support files from the original VINS-Mono:
+Run the following command in the directory ABOVE your ROS workspace to install support files from the original VINS-Mono. Putting it in the ROS workspace causes build issues:
 ```
 git clone git@github.com:HKUST-Aerial-Robotics/VINS-Mono.git
 ```

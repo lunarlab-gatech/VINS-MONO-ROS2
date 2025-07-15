@@ -1,25 +1,25 @@
 %YAML:1.0
 
 #common parameters
-imu_topic: "/hercules_node/Drone1/imu/imu"
-image_topic: "/hercules_node/Drone1/front_center_Scene/image"
+imu_topic: "/imu"
+image_topic: "/cam0"
 output_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/drone"
 
 #camera calibration 
 model_type: PINHOLE
 camera_name: camera
-image_width: 1280
-image_height: 720
+image_width: 752
+image_height: 480
 distortion_parameters:
    k1: 0
    k2: 0
    p1: 0
    p2: 0
 projection_parameters:
-   fx: 640
-   fy: 640
-   cx: 640
-   cy: 360
+   fx: 376
+   fy: 376
+   cx: 376
+   cy: 240
 
 # Extrinsic parameter between IMU and Camera.
 estimate_extrinsic: 0   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
@@ -31,20 +31,20 @@ extrinsicRotation: !!opencv-matrix
    rows: 3
    cols: 3
    dt: d
-   data: [ 0,  0.17364818,  0.98480775,    
-          -1,           0,           0,     
-           0, -0.98480775,  0.17364818]
+   data: [  0,  0.17364818, 0.98480775,    
+            1,           0,          0,     
+            0, 0.98480775, -0.17364818]
 #Translation from camera frame to imu frame, imu^T_cam
 extrinsicTranslation: !!opencv-matrix
    rows: 3
    cols: 1
    dt: d
-   data: [0.35, 0, -0.1]
+   data: [0.35, 0, 0.1]
 
 #feature traker paprameters
 max_cnt: 150            # max feature number in feature tracking
 min_dist: 30            # min distance between two features 
-freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
+freq: 20                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
 F_threshold: 1.0        # ransac threshold (pixel)
 show_track: 1           # publish tracking image as topic
 equalize: 0             # if image is too dark or light, turn on equalize to find enough features
@@ -62,12 +62,6 @@ gyr_n: 0.004         # gyroscope measurement noise standard deviation.     #0.05
 acc_w: 0.00004         # accelerometer bias random work noise standard deviation.  #0.02
 gyr_w: 2.0e-6       # gyroscope bias random work noise standard deviation.     #4.0e-5
 g_norm: 9.81007     # gravity magnitude
-
-# acc_n: 2.353596e-03  # accelerometer measurement noise standard deviation. #0.2   0.04
-# gyr_n: 8.72664626e-05 # gyroscope measurement noise standard deviation.  #0.05  0.004
-# acc_w: 1.248182769e-05 # accelerometer bias random work noise standard deviation. #0.02
-# gyr_w: 9.973502396e-07 # gyroscope bias random work noise standard deviation.  #4.0e-5
-# g_norm: 9.81007     # gravity magnitude
 
 #loop closure parameters
 loop_closure: 1                    # start loop closure

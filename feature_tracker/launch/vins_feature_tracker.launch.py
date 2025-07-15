@@ -43,7 +43,7 @@ def generate_launch_description():
 
     rviz_config_path = PathJoinSubstitution([
         config_pkg_path,
-        'config/vins_euroc_rviz.rviz'
+        'config/vins_hercules_rviz.rviz'
     ])
 
     rviz_node = Node(
