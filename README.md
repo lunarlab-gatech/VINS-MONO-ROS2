@@ -47,17 +47,18 @@ run_container.sh
 
 The rest of this README **assumes that you are inside the Docker container**. For easier debugging and use, its highly recommended to install the [VSCode Docker extension](https://code.visualstudio.com/docs/containers/overview), which allows you to start/stop the container and additionally attach VSCode to the container by right-clicking on the container and selecting `Attach Visual Studio Code`.
 
+# Support Files install
+Run the following command in the directory ABOVE your ROS workspace to install support files from the original VINS-Mono. Putting it in the ROS workspace causes build issues:
+```
+git clone git@github.com:HKUST-Aerial-Robotics/VINS-Mono.git
+```
+
 
 # Build
 Next navigate to the root of your ROS workspace, and run the following commands:
 ```
 colcon build
-```
-
-# Support Files install
-Run the following command in the directory ABOVE your ROS workspace to install support files from the original VINS-Mono. Putting it in the ROS workspace causes build issues:
-```
-git clone git@github.com:HKUST-Aerial-Robotics/VINS-Mono.git
+source install/setup.bash
 ```
 
 # 4. VINS-MONO-ROS2 on EuRoC datasets
@@ -101,10 +102,37 @@ ros2 bag play $(PATH_TO_YOUR_DATASET)/ar_box        # for ros2 bag
 ```
 ![ar_demo](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_ar_demo.gif)
 
-# 5. VINS-MONO-ROS2 on HERCULES dataset
+# 5. VINS-MONO-ROS2 on GRaCo dataset
 
-Run the following command to run V1.2 of the HERCULES dataset:
+Run the following command to run VINS-Mono on sequence Ground-04 of the [GRaCo](https://ieeexplore.ieee.org/abstract/document/10008011) Dataset:
 
 ```
-tmuxp load ./src/VINS-MONO-ROS2/tmux/hercules_husky_V1.2.yaml
+tmuxp load ./src/VINS-MONO-ROS2/tmux/graco_ground4.yaml
 ```
+
+For sequence Ground-05, run the following:
+```
+tmuxp load ./src/VINS-MONO-ROS2/tmux/graco_ground5.yaml
+```
+
+#### Note on Parameters
+
+In order to adapt GRaCo to work successfully with VINS-Mono, two types of parameters were changed:
+- 1. Robot parameters, or those that would always have to change due to differences in the robots/systems we are using. 
+- 2. Tunable parameters, or those that don't fall in the category above.
+
+For a fair evaluation of VINS-Mono, ideally we only change parameters in category 1. However, due to the fact that we will take VINS-Mono's output and apply it to a Multi-Robot SLAM pipeline later, we felt it necessary to change at least one parameter related to loop closures, as the SLAM pipeline should handle that. 
+
+Below we document all parameters that were changed in both categories 1 & 2:
+
+Category 1:
+```
+imu_topic, image_topic, output_path, image_width, image_height, distortion_parameters, projection_parameters, extrinsicRotation, extrinsicTranslation, acc_n, gyr_n, acc_w, gyr_w, pose_graph_save_path, support_path
+```
+
+Category 2:
+```
+loop_closure
+```
+
+For reasons for changes in category 2, see the corresponding .yaml files.
