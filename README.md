@@ -132,7 +132,7 @@ imu_topic, image_topic, output_path, image_width, image_height, distortion_param
 
 Category 2:
 ```
-loop_closure
+loop_closure, freq
 ```
 
 For reasons for changes in category 2, see the corresponding .yaml files.
