@@ -22,10 +22,10 @@ windows:
     - export RCL_LOG_LEVEL=DEBUG
     - ros2 launch vins_estimator euroc.launch.py config_path:=config/hercules/husky.yaml
   - shell_command:
-    - ros2 bag play $DATA_DIR/Husky1 -r 1.0 --topics /imu /cam0 /odom_gt /odom_gt/path
+    - ros2 bag play /home/dbutterfield3/data/Hercules_datasets/V1.3.1/test1_2uav2ugv_calib_752x480_Husky1 -r 1.0 --topics /imu /camera/color/image_raw /odom_gt /odom_gt/path /tf /tf_static
   -
 
 - window_name: kill
   layout: tiled
   panes:
-  - echo "tmux kill-session -t vins_mono"
+  - tmux kill-session -t vins_mono_

@@ -2,7 +2,7 @@ session_name: vins_mono
 
 environment:
   ROS_DIR: '/opt/ros/foxy'
-  DATA_DIR: '/home/dbutterfield3/data/Hercules_datasets/V1.3'
+  DATA_DIR: '/home/dbutterfield3/data/Hercules_datasets/V1.4/bags'
   ROS_WS: '/home/dbutterfield3/vins_mono_ws'
 
 options:
@@ -27,7 +27,7 @@ windows:
     - ros2 launch vins_estimator euroc.launch.py config_path:=config/hercules/drone.yaml
   - shell_command:
     - sleep 4
-    - ros2 bag play /home/dbutterfield3/data/Hercules_datasets/V1.3.1/test1_2uav2ugv_calib_752x480_Drone1 -r 1.0 --topics /imu /camera/color/image_raw /odom_gt /odom_gt/path /tf /tf_static
+    - ros2 bag play /home/dbutterfield3/data/Hercules_datasets/V1.4/bags/Drone1 -r 1.0 --topics /imu /cam0 /odom_gt /odom_gt/path
 
 - window_name: kill
   layout: tiled
