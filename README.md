@@ -136,3 +136,24 @@ loop_closure, freq
 ```
 
 For reasons for changes in category 2, see the corresponding .yaml files.
+
+# 5. VINS-MONO-ROS2 on HERCULES Dataset (Australia Environment)
+
+Run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
+```
+tmuxp load ./src/VINS-MONO-ROS2/tmux/HERCULES_V1.4/<robot_name>.yaml
+```
+
+#### Note on Parameters
+
+Here are the parameters changed in categories 1 & 2 (referring to same categories from GRaCo dataset):
+
+Category 1:
+```
+imu_topic, image_topic, output_path, distortion_parameters, projection_parameters, extrinsicRotation, extrinsicTranslation, pose_graph_save_path, support_path
+```
+
+Category 2:
+```
+loop_closure, freq
+```
