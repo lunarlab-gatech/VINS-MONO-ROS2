@@ -2,7 +2,7 @@ session_name: vins_mono
 
 environment:
   ROS_DIR: '/opt/ros/foxy'
-  DATA_DIR: '/home/dbutterfield3/data/Hercules_datasets/V1.4/extract/bags_for_vins_mono'
+  DATA_DIR: '/home/dbutterfield3/data/Hercules_datasets/V1.5/extract/bags_for_vins_mono'
   ROS_WS: '/home/dbutterfield3/vins_mono_ws'
 
 options:

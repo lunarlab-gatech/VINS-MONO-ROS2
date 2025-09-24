@@ -2,7 +2,7 @@ session_name: vins_mono
 
 environment:
   ROS_DIR: '/opt/ros/foxy'
-  DATA_DIR: '/home/dbutterfield3/data/Hercules_datasets/V1.4/extract/bags_for_vins_mono'
+  DATA_DIR: '/home/dbutterfield3/data/Hercules_datasets/V1.5/extract/bags_for_vins_mono'
   ROS_WS: '/home/dbutterfield3/vins_mono_ws'
 
 options:
@@ -20,14 +20,14 @@ windows:
     - 
   - shell_command:
     - sleep 2
-    - ros2 launch feature_tracker vins_feature_tracker.launch.py config_path:=config/hercules/Drone1.yaml
+    - ros2 launch feature_tracker vins_feature_tracker.launch.py config_path:=config/hercules/Husky2.yaml
   - shell_command:
     - export RCL_LOG_LEVEL=DEBUG
     - sleep 2
-    - ros2 launch vins_estimator euroc.launch.py config_path:=config/hercules/Drone1.yaml
+    - ros2 launch vins_estimator euroc.launch.py config_path:=config/hercules/Husky2.yaml
   - shell_command:
     - sleep 4
-    - ros2 bag play $DATA_DIR/Drone1 --topics /imu /cam0 /odom_gt /odom_gt/path
+    - ros2 bag play $DATA_DIR/Husky2 --topics /imu /cam0 /odom_gt /odom_gt/path
 
 - window_name: kill
   layout: tiled
