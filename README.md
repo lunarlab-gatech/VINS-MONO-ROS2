@@ -108,8 +108,6 @@ In order to adapt GRaCo to work successfully with VINS-Mono, two types of parame
 - 1. Robot parameters, or those that would always have to change due to differences in the robots/systems we are using. 
 - 2. Tunable parameters, or those that don't fall in the category above.
 
-For a fair evaluation of VINS-Mono, ideally we only change parameters in category 1. However, due to the fact that we will take VINS-Mono's output and apply it to a Multi-Robot SLAM pipeline later, we felt it necessary to change at least one parameter related to loop closures, as the SLAM pipeline should handle that. 
-
 Below we document all parameters that were changed in both categories 1 & 2:
 
 Category 1:
@@ -126,14 +124,16 @@ For reasons for changes in category 2, see the corresponding .yaml files.
 
 # 6. VINS-MONO-ROS2 on HERCULES Dataset (Australia Environment)
 
-Run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
+First, absolute paths in files in `tmux/HERCULES_V1.5/` and `config_pkg/config/hercules/` will need to be updated.
+
+Then, run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
 ```
 tmuxp load ./src/VINS-MONO-ROS2/tmux/HERCULES_V1.5/<robot_name>.yaml
 ```
 
 #### Note on Parameters
 
-Here are the parameters changed in categories 1 & 2 (referring to same categories from GRaCo dataset):
+Here are the parameters changed in categories 1 & 2 (referring to same categories from GRaCo dataset in Section 5 above):
 
 Category 1:
 ```
@@ -142,5 +142,5 @@ imu_topic, image_topic, output_path, distortion_parameters, projection_parameter
 
 Category 2:
 ```
-loop_closure, freq
+freq, loop_closure
 ```
