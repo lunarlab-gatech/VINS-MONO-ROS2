@@ -71,7 +71,7 @@ loop_closure: 0                    # start loop closure
 load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
 fast_relocalization: 0             # useful in real-time and large project
 pose_graph_save_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/Drone2/pose_graph/" # save and load path
-support_path: "/home/dbutterfield3/VINS-Mono/support_files"
+support_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/config_pkg/support_files"
 
 #unsynchronization parameters
 estimate_td: 0                      # online estimate time offset between camera and imu

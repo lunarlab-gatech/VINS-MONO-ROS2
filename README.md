@@ -1,20 +1,13 @@
 # VINS-MONO-ROS2
 ## ROS2 version of VINS-MONO
 # 1. Introduction
-This repository implements the ROS2 version of VINS-MONO, mainly including the following packages:
-* **camera_model**
-* **feature_tracker**
-* **vins_estimator**
-* **pose_graph**
-* **benchmark_pubilsher**
-* **ar_demo**
-* **config_pkg**
-
+This repository implements the ROS2 version of VINS-MONO; and is forked by the Lunar Lab @ GT to generate odometry estimates for SLAM systems and to use as a baseline.
 **NOTE**: Since the **_get_package_share_directory_** command in ROS2 launch files can only locate packages in the _install_ directory instead of the _src_ directory like ROS1, we create a package called **_config_pkg_** to store the _config/_ and _support_files/_ folders from VINS-MONO.
  
 ![mh01](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_mh01.gif)
 ![mh02](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_mh02.gif)
 # 2. Prerequisites
+
 * System  
   * Ubuntu 20.04  
   * ROS2 foxy
@@ -22,6 +15,7 @@ This repository implements the ROS2 version of VINS-MONO, mainly including the f
   * OpenCV 4.2.0
   * [Ceres Solver](http://ceres-solver.org/installation.html) 1.14.0
   * Eigen 3.3.7
+
 # 3. Build VINS-MONO-ROS2
 
 ## Docker Setup
@@ -46,13 +40,6 @@ run_container.sh
 ```
 
 The rest of this README **assumes that you are inside the Docker container**. For easier debugging and use, its highly recommended to install the [VSCode Docker extension](https://code.visualstudio.com/docs/containers/overview), which allows you to start/stop the container and additionally attach VSCode to the container by right-clicking on the container and selecting `Attach Visual Studio Code`.
-
-# Support Files install
-Run the following command in the directory ABOVE your ROS workspace to install support files from the original VINS-Mono. Putting it in the ROS workspace causes build issues:
-```
-git clone git@github.com:HKUST-Aerial-Robotics/VINS-Mono.git
-```
-
 
 # Build
 Next navigate to the root of your ROS workspace, and run the following commands:
@@ -137,11 +124,11 @@ loop_closure, freq
 
 For reasons for changes in category 2, see the corresponding .yaml files.
 
-# 5. VINS-MONO-ROS2 on HERCULES Dataset (Australia Environment)
+# 6. VINS-MONO-ROS2 on HERCULES Dataset (Australia Environment)
 
 Run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
 ```
-tmuxp load ./src/VINS-MONO-ROS2/tmux/HERCULES_V1.4/<robot_name>.yaml
+tmuxp load ./src/VINS-MONO-ROS2/tmux/HERCULES_V1.5/<robot_name>.yaml
 ```
 
 #### Note on Parameters
