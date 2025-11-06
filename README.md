@@ -124,11 +124,11 @@ For reasons for changes in category 2, see the corresponding .yaml files.
 
 # 6. VINS-MONO-ROS2 on HERCULES Dataset (Australia Environment)
 
-First, absolute paths in files in `tmux/HERCULES_V1.5/` and `config_pkg/config/hercules/` will need to be updated.
+First, absolute paths in files in `tmux/HERCULES/tmuxp_launch.py` and `config_pkg/config/hercules/` will need to be updated.
 
 Then, run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
 ```
-tmuxp load ./src/VINS-MONO-ROS2/tmux/HERCULES_V1.5/<robot_name>.yaml
+python3 src/VINS-MONO-ROS2/tmux/HERCULES/tmuxp_launch.py <version_number> <robot_name>
 ```
 
 #### Note on Parameters
