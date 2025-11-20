@@ -66,8 +66,7 @@ gyr_w: 2.0e-6       # gyroscope bias random work noise standard deviation.
 g_norm: 9.81007     # gravity magnitude
 
 #loop closure parameters
-# ===== NOTE: We turn this off as ROMAN will use Kimera-RPGO with loop closures.
-loop_closure: 0                    # start loop closure
+loop_closure: 1                    # start loop closure
 load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
 fast_relocalization: 0             # useful in real-time and large project
 pose_graph_save_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/Drone1/pose_graph/" # save and load path

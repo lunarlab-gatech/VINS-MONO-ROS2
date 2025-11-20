@@ -3,7 +3,7 @@
 #common parameters
 imu_topic: "/imu"
 image_topic: "/cam0"
-output_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/Husky1"
+output_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/Drone1"
 
 #camera calibration 
 model_type: PINHOLE
@@ -31,15 +31,15 @@ extrinsicRotation: !!opencv-matrix
    rows: 3
    cols: 3
    dt: d
-   data: [0,  0, 1,
-          1,  0, 0,
-          0,  1, 0]
+   data: [  0, -0.42261826, 0.90630779,    
+            1,           0,          0,     
+            0,  0.90630779, 0.42261826]
 #Translation from camera frame to imu frame, imu^T_cam
 extrinsicTranslation: !!opencv-matrix
    rows: 3
    cols: 1
    dt: d
-   data: [0,0,-0.35]
+   data: [0.35, 0, 0.1]
 
 #feature traker parameters
 max_cnt: 150            # max feature number in feature tracking
@@ -69,7 +69,7 @@ g_norm: 9.81007     # gravity magnitude
 loop_closure: 1                    # start loop closure
 load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
 fast_relocalization: 0             # useful in real-time and large project
-pose_graph_save_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/Husky1/pose_graph/" # save and load path
+pose_graph_save_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/output/hercules/Drone1/pose_graph/" # save and load path
 support_path: "/home/dbutterfield3/vins_mono_ws/src/VINS-MONO-ROS2/config_pkg/support_files"
 
 #unsynchronization parameters
