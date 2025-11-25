@@ -48,6 +48,16 @@ colcon build
 source install/setup.bash
 ```
 
+Finally, install the python dependencies (for WandB sweeps) with the following commands:
+```
+cd src/VINS-MONO-ROS2/dependencies/robotdataprocess/
+unset PYTHONPATH
+source /opt/miniconda3/bin/activate robotdataprocess
+pip install .
+```
+
+Then, kill the shell to deactivate the `robotdataprocess` environment.
+
 # 4. VINS-MONO-ROS2 on EuRoC datasets
 ## 4.1. ROS1 bag to ROS2 bag
 Download [EuRoC datasets](https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets). However, the datasets are in ROS1 format. To run the code in ROS2, we need to first convert these datasets to ROS2 format. We can use [rosbags](https://pypi.org/project/rosbags/) for this purpose, which can convert ROS built-in messages between ROS1 and ROS2.  
@@ -128,7 +138,15 @@ First, absolute paths in files in `tmux/HERCULES/tmuxp_launch.py` and `config_pk
 
 Then, run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
 ```
+source install/setup.bash
 python3 src/VINS-MONO-ROS2/tmux/HERCULES/tmuxp_launch.py <version_number> <robot_name>
+```
+
+To run a sweep of the IMU noise parameters, run the following commands:
+```
+source install/setup.bash
+wandb sweep -e <entity> -p <project> src/VINS-MONO-ROS2/research/sweep.yaml
+wandb agent '<entity>/<project>/<sweep_id>'
 ```
 
 #### Note on Parameters

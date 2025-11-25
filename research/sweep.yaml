@@ -1,0 +1,35 @@
+program: src/VINS-MONO-ROS2/research/run_noises_sweep.py
+method: bayes
+
+metric:
+  name: RMS_ATE
+  goal: minimize
+
+parameters:
+  # acc_n:
+  #   min: 0.000000001
+  #   max: 1.0
+
+  # gyr_n:
+  #   min: 0.000000001
+  #   max: 1.0
+
+  # acc_w:
+  #   min: 0.000000001
+  #   max: 0.1
+  
+  # gyr_w:
+  #   min: 0.000000001
+  #   max: 0.01
+
+  acc_n: 
+    values: [0.08]
+    
+  gyr_n:
+    values: [0.004]
+
+  acc_w:
+    values: [0.00004]
+
+  gyr_w:
+    values: [2.0e-6]

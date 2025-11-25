@@ -41,6 +41,29 @@ T readParam(rclcpp::Node::SharedPtr n, std::string name)
     return ans;
 }
 
+template <typename T>
+T readParamFallbackYaml(rclcpp::Node::SharedPtr n, std::string name, cv::FileStorage &fsSettings)
+{
+    T ans;
+    T default_value = T{};
+    n->declare_parameter<T>(name, default_value);
+    if (n->get_parameter(name, ans))
+    {
+        RCLCPP_INFO_STREAM(n->get_logger(), "Loaded " << name << ": " << ans);
+    }
+    else if (!fsSettings[name].empty())
+    {
+        ans = static_cast<T>(fsSettings[name].real());
+        RCLCPP_WARN_STREAM(n->get_logger(), "Failed to load " << name << " from ROS2 param server, fallback to yaml: " << ans);
+    }
+    else 
+    {
+        RCLCPP_ERROR_STREAM(n->get_logger(), "Failed to load " << name);
+        rclcpp::shutdown();
+    }
+    return ans;
+}
+
 void readParameters(rclcpp::Node::SharedPtr n)
 {
     std::string config_file;
@@ -69,10 +92,11 @@ void readParameters(rclcpp::Node::SharedPtr n)
     std::ofstream fout(VINS_RESULT_PATH, std::ios::out);
     fout.close();
 
-    ACC_N = fsSettings["acc_n"];
-    ACC_W = fsSettings["acc_w"];
-    GYR_N = fsSettings["gyr_n"];
-    GYR_W = fsSettings["gyr_w"];
+    ACC_N = readParamFallbackYaml<double>(n, "acc_n", fsSettings);
+    ACC_W = readParamFallbackYaml<double>(n, "acc_w", fsSettings);
+    GYR_N = readParamFallbackYaml<double>(n, "gyr_n", fsSettings);
+    GYR_W = readParamFallbackYaml<double>(n, "gyr_w", fsSettings);
+
     G.z() = fsSettings["g_norm"];
     ROW = fsSettings["image_height"];
     COL = fsSettings["image_width"];

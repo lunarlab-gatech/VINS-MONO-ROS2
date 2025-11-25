@@ -58,6 +58,7 @@ CMD ["/bin/bash"]
 
 # Set user arguments (being username, echo $UID, and id -g)
 ARG USERNAME=dbutterfield3
+ENV USERNAME=${USERNAME}
 ARG USER_UID=3332128
 ARG USER_GID=2626
 
@@ -96,3 +97,30 @@ RUN sudo apt install libboost-all-dev ros-foxy-image-transport ros-foxy-cv-bridg
 
 # Install additional plugins for rqt
 RUN sudo apt install ros-foxy-rqt-* -y
+
+# Ensure python points to system python 3.8
+RUN sudo ln -sf /usr/bin/python3.8 /usr/bin/python
+
+# Install Miniconda (non-interactive, no auto-init)
+ENV MINICONDA_PATH=/opt/miniconda3
+ENV PYTHONPATH=""
+
+RUN sudo wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    sudo bash /tmp/miniconda.sh -b -p $MINICONDA_PATH && \
+    sudo rm /tmp/miniconda.sh
+
+# Disable auto-activation of conda base
+RUN $MINICONDA_PATH/bin/conda config --set auto_activate_base false
+
+# Install wandb in system Python 3.8
+RUN /usr/bin/python -m pip install --no-cache-dir wandb
+
+# Accept Miniconda TOS and create Python 3.10 environment
+RUN $MINICONDA_PATH/bin/conda config --set always_yes yes && \
+    $MINICONDA_PATH/bin/conda config --set changeps1 no && \
+    $MINICONDA_PATH/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    $MINICONDA_PATH/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
+    $MINICONDA_PATH/bin/conda create -y -n robotdataprocess python=3.10
+
+# Restore PYTHONPATH for ROS
+ENV PYTHONPATH=/opt/ros/foxy/lib/python3.8/site-packages
