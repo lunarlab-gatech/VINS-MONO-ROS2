@@ -25,7 +25,7 @@ feature_tracker_process = subprocess.Popen([
 
 # Launch VINS-Mono Estimator with specified noise parameters
 vins_est_process = subprocess.Popen([
-    "ros2", "launch", "vins_estimator", "euroc.launch.py", 
+    "ros2", "launch", "vins_estimator", "launch_sweep.py", 
     f"config_path:=config/hercules/{dataset_number}/{robot_name}.yaml",
     f"acc_n:={acc_n}", f"gyr_n:={gyr_n}",
     f"acc_w:={acc_w}", f"gyr_w:={gyr_w}"

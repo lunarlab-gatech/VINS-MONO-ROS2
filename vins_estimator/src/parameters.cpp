@@ -45,8 +45,6 @@ template <typename T>
 T readParamFallbackYaml(rclcpp::Node::SharedPtr n, std::string name, cv::FileStorage &fsSettings)
 {
     T ans;
-    T default_value = T{};
-    n->declare_parameter<T>(name, default_value);
     if (n->get_parameter(name, ans))
     {
         RCLCPP_INFO_STREAM(n->get_logger(), "Loaded " << name << ": " << ans);
@@ -54,7 +52,7 @@ T readParamFallbackYaml(rclcpp::Node::SharedPtr n, std::string name, cv::FileSto
     else if (!fsSettings[name].empty())
     {
         ans = static_cast<T>(fsSettings[name].real());
-        RCLCPP_WARN_STREAM(n->get_logger(), "Failed to load " << name << " from ROS2 param server, fallback to yaml: " << ans);
+        RCLCPP_WARN_STREAM(n->get_logger(), "Param " << name << " not provided by ROS2 param server, using YAML value: " << ans);
     }
     else 
     {
