@@ -21,6 +21,7 @@ void Estimator::setParameter()
 
 void Estimator::clearState()
 {
+
     for (int i = 0; i < WINDOW_SIZE + 1; i++)
     {
         Rs[i].setIdentity();
@@ -159,12 +160,41 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     {
         if (frame_count == WINDOW_SIZE)
         {
-            bool result = false;
-            if( ESTIMATE_EXTRINSIC != 2 && (header.stamp.sec + header.stamp.nanosec*(1e-9) - initial_timestamp) > 0.1)
+
+            solver_flag == NON_LINEAR;
+
+            // Calculate Ps_actual and Rs_actual using our knowlege of GT position and rotation
+            Vector3d Ps_initial_GT(5.000000, 5.000000, 0.912486);
+            Vector3d Vs_initial_GT(0.0, 0.0, 0.0);
+            Matrix3d Rs_initial_GT;
+            Rs_initial_GT << 1, 0, 0,
+                             0, 1, 0,
+                             0, 0, 1;
+            
+            Vector3d g_actual(0.0, 0.0, 9.81007);
+            Vector3d Ps_actual[(WINDOW_SIZE + 1)];
+            Vector3d Vs_actual[(WINDOW_SIZE + 1)];
+            Matrix3d Rs_actual[(WINDOW_SIZE + 1)];
+            for (int i = 0; i <= frame_count; i++)
             {
-               result = initialStructure();
-               initial_timestamp = header.stamp.sec + header.stamp.nanosec*(1e-9);
+                RCUTILS_LOG_INFO("Position %d: %f, %f, %f", i, Ps[i].x(), Ps[i].y(), Ps[i].z());
+                Ps[i] = Ps_initial_GT + Rs_initial_GT * Ps[i];
+                RCUTILS_LOG_INFO("Position %d: %f, %f, %f", i, Ps_actual[i].x(), Ps_actual[i].y(), Ps_actual[i].z());
+                Vs[i] = Vs_initial_GT + Rs_initial_GT * Vs[i];
+                Rs[i] = Rs_initial_GT * Rs[i];
             }
+            g = g_actual;
+            initial_timestamp = header.stamp.sec + header.stamp.nanosec*(1e-9);
+            bool result = true;
+
+            // ==================================================
+
+            // bool result = false;
+            // if( ESTIMATE_EXTRINSIC != 2 && (header.stamp.sec + header.stamp.nanosec*(1e-9) - initial_timestamp) > 0.1)
+            // {
+            //    result = initialStructure();
+            //    initial_timestamp = header.stamp.sec + header.stamp.nanosec*(1e-9);
+            // }
             if(result)
             {
                 solver_flag = NON_LINEAR;
@@ -437,6 +467,30 @@ bool Estimator::visualInitialAlign()
     }
     RCUTILS_LOG_INFO("g0: %f, %f, %f", g.x(), g.y(), g.z());
     RCUTILS_LOG_INFO("my R0: %f, %f, %f", Utility::R2ypr(Rs[0]).x(), Utility::R2ypr(Rs[0]).y(), Utility::R2ypr(Rs[0]).z()); 
+    
+    // Log all the position values
+    for (int i = 0; i <= frame_count; i++)
+    {
+        RCUTILS_LOG_INFO("Position %d: %f, %f, %f", i, Ps[i].x(), Ps[i].y(), Ps[i].z());
+    }
+
+    // ==================================================
+    // Now put in the actual values 
+    // for (int i = 0; i <= frame_count; i++)
+    // {
+    //     Ps[i] = Ps_actual[i];
+    //     Rs[i] = Rs_actual[i];
+    //     Vs[i] = Vs_actual[i];
+    // }
+    // g = g_actual;
+
+    // RCUTILS_LOG_INFO("g has been replaced with GT value: %f, %f, %f", g.x(), g.y(), g.z());
+    // RCUTILS_LOG_INFO("So has position, orientation, and velocity.");
+
+    // for (int i = 0; i <= frame_count; i++)
+    // {
+    //     RCUTILS_LOG_INFO("Position %d: %f, %f, %f", i, Ps[i].x(), Ps[i].y(), Ps[i].z());
+    // }
 
     return true;
 }
