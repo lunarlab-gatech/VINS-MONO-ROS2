@@ -115,12 +115,12 @@ RUN $MINICONDA_PATH/bin/conda config --set auto_activate_base false
 # Install wandb in system Python 3.8
 RUN /usr/bin/python -m pip install --no-cache-dir wandb
 
-# Accept Miniconda TOS and create Python 3.10 environment
+# Accept Miniconda TOS and create Python 3.8 environment (Although same python, robotdataprocess needs different versions of some packages)
 RUN $MINICONDA_PATH/bin/conda config --set always_yes yes && \
     $MINICONDA_PATH/bin/conda config --set changeps1 no && \
     $MINICONDA_PATH/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
     $MINICONDA_PATH/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
-    $MINICONDA_PATH/bin/conda create -y -n robotdataprocess python=3.10
+    $MINICONDA_PATH/bin/conda create -y -n robotdataprocess python=3.8
 
 # Restore PYTHONPATH for ROS
 ENV PYTHONPATH=/opt/ros/foxy/lib/python3.8/site-packages

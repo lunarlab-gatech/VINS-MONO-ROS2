@@ -1,4 +1,4 @@
-DATA_DIR='/home/dbutterfield3/Desktop/data'
+DATA_DIR='/media/dbutterfield3/T731/'
 ROS_WS_DIR='/home/dbutterfield3/Research/ros_workspaces/vins_mono_ws'
 
 docker run -it \

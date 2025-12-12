@@ -139,7 +139,7 @@ First, absolute paths in files in `tmux/HERCULES/tmuxp_launch.py` and `config_pk
 Then, run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
 ```
 source install/setup.bash
-python3 src/VINS-MONO-ROS2/tmux/HERCULES/tmuxp_launch.py <version_number> <robot_name>
+python3 src/VINS-MONO-ROS2/tmux/HERCULES/tmuxp_launch.py <version_number> <robot_name> <use_rosbag_play>
 ```
 
 To run a sweep of the IMU noise parameters, run the following commands:
