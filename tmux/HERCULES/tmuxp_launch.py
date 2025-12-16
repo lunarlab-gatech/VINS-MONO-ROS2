@@ -19,7 +19,7 @@ def build_config(dataset_number: str, robot_name: str, use_rosbag_play: str):
         use_rosbag = False
 
     if use_rosbag:
-        play_cmds = [f'ros2 bag play $DATA_DIR/{robot_name} --topics /imu /cam0 /odom_gt /odom_gt/path']
+        play_cmds = [f'ros2 bag play $DATA_DIR/{robot_name} --topics /imu0 /cam0/image_raw /odom_gt /odom_gt/path']
     else:
         play_cmds = ['unset PYTHONPATH',
                      'source /opt/miniconda3/bin/activate robotdataprocess',
