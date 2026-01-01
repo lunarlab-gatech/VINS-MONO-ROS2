@@ -1,5 +1,7 @@
 #include "parameters.h"
 
+double SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL;
+
 double INIT_DEPTH;
 double MIN_PARALLAX;
 double ACC_N, ACC_W;
@@ -78,6 +80,9 @@ void readParameters(rclcpp::Node::SharedPtr n)
     NUM_ITERATIONS = fsSettings["max_num_iterations"];
     MIN_PARALLAX = fsSettings["keyframe_parallax"];
     MIN_PARALLAX = MIN_PARALLAX / FOCAL_LENGTH;
+
+    SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL = fsSettings["sqrt_root_info_mat_for_visual_residual"];
+    RCLCPP_INFO_STREAM(n->get_logger(), "sqrt_root_info_mat_for_visual_residual: " << SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL);
 
     std::string OUTPUT_PATH;
     fsSettings["output_path"] >> OUTPUT_PATH;
