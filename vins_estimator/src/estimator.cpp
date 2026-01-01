@@ -14,8 +14,8 @@ void Estimator::setParameter()
         ric[i] = RIC[i];
     }
     f_manager.setRic(ric);
-    ProjectionFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
-    ProjectionTdFactor::sqrt_info = FOCAL_LENGTH / 1.5 * Matrix2d::Identity();
+    ProjectionFactor::sqrt_info = SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL * Matrix2d::Identity();
+    ProjectionTdFactor::sqrt_info = SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL * Matrix2d::Identity();
     td = TD;
 }
 

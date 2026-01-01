@@ -19,6 +19,8 @@ extern double INIT_DEPTH;
 extern double MIN_PARALLAX;
 extern int ESTIMATE_EXTRINSIC;
 
+extern double SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL;
+
 extern double ACC_N, ACC_W;
 extern double GYR_N, GYR_W;
 

@@ -1,5 +1,7 @@
 #include "parameters.h"
 
+double SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL;
+
 double INIT_DEPTH;
 double MIN_PARALLAX;
 double ACC_N, ACC_W;
@@ -41,6 +43,27 @@ T readParam(rclcpp::Node::SharedPtr n, std::string name)
     return ans;
 }
 
+template <typename T>
+T readParamFallbackYaml(rclcpp::Node::SharedPtr n, std::string name, cv::FileStorage &fsSettings)
+{
+    T ans;
+    if (n->get_parameter(name, ans))
+    {
+        RCLCPP_INFO_STREAM(n->get_logger(), "Loaded " << name << ": " << ans);
+    }
+    else if (!fsSettings[name].empty())
+    {
+        ans = static_cast<T>(fsSettings[name].real());
+        RCLCPP_WARN_STREAM(n->get_logger(), "Param " << name << " not provided by ROS2 param server, using YAML value: " << ans);
+    }
+    else 
+    {
+        RCLCPP_ERROR_STREAM(n->get_logger(), "Failed to load " << name);
+        rclcpp::shutdown();
+    }
+    return ans;
+}
+
 void readParameters(rclcpp::Node::SharedPtr n)
 {
     std::string config_file;
@@ -58,6 +81,9 @@ void readParameters(rclcpp::Node::SharedPtr n)
     MIN_PARALLAX = fsSettings["keyframe_parallax"];
     MIN_PARALLAX = MIN_PARALLAX / FOCAL_LENGTH;
 
+    SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL = fsSettings["sqrt_root_info_mat_for_visual_residual"];
+    RCLCPP_INFO_STREAM(n->get_logger(), "sqrt_root_info_mat_for_visual_residual: " << SQRT_ROOT_INFO_MAT_FOR_VISUAL_RESIDUAL);
+
     std::string OUTPUT_PATH;
     fsSettings["output_path"] >> OUTPUT_PATH;
     VINS_RESULT_PATH = OUTPUT_PATH + "/vins_result_no_loop.csv";
@@ -69,10 +95,11 @@ void readParameters(rclcpp::Node::SharedPtr n)
     std::ofstream fout(VINS_RESULT_PATH, std::ios::out);
     fout.close();
 
-    ACC_N = fsSettings["acc_n"];
-    ACC_W = fsSettings["acc_w"];
-    GYR_N = fsSettings["gyr_n"];
-    GYR_W = fsSettings["gyr_w"];
+    ACC_N = readParamFallbackYaml<double>(n, "acc_n", fsSettings);
+    ACC_W = readParamFallbackYaml<double>(n, "acc_w", fsSettings);
+    GYR_N = readParamFallbackYaml<double>(n, "gyr_n", fsSettings);
+    GYR_W = readParamFallbackYaml<double>(n, "gyr_w", fsSettings);
+
     G.z() = fsSettings["g_norm"];
     ROW = fsSettings["image_height"];
     COL = fsSettings["image_width"];
