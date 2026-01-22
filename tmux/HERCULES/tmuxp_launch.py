@@ -24,7 +24,7 @@ def build_config(dataset_number: str, robot_name: str, use_rosbag_play: str):
         play_cmds = ['unset PYTHONPATH',
                      'source /opt/miniconda3/bin/activate robotdataprocess',
                      'source $ROS_DIR/setup.bash',
-                     f'python3 $ROS_WS/src/VINS-MONO-ROS2/dependencies/robotdataprocess/examples/Hercules/publish_data_VINS-Mono.py --dataset_num {dataset_number} --robot_name {robot_name}']
+                     f'python3 $ROS_WS/src/VINS-MONO-ROS2/dependencies/robotdataprocess/examples/Hercules/publish/publish_data_VINS-Mono.py --dataset_num {dataset_number} --robot_name {robot_name}']
 
     config = {
         'session_name': 'vins_mono', 
