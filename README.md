@@ -1,20 +1,13 @@
 # VINS-MONO-ROS2
 ## ROS2 version of VINS-MONO
 # 1. Introduction
-This repository implements the ROS2 version of VINS-MONO, mainly including the following packages:
-* **camera_model**
-* **feature_tracker**
-* **vins_estimator**
-* **pose_graph**
-* **benchmark_pubilsher**
-* **ar_demo**
-* **config_pkg**
-
+This repository implements the ROS2 version of VINS-MONO; and is forked by the Lunar Lab @ GT to generate odometry estimates for SLAM systems and to use as a baseline.
 **NOTE**: Since the **_get_package_share_directory_** command in ROS2 launch files can only locate packages in the _install_ directory instead of the _src_ directory like ROS1, we create a package called **_config_pkg_** to store the _config/_ and _support_files/_ folders from VINS-MONO.
  
 ![mh01](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_mh01.gif)
 ![mh02](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_mh02.gif)
 # 2. Prerequisites
+
 * System  
   * Ubuntu 20.04  
   * ROS2 foxy
@@ -22,27 +15,62 @@ This repository implements the ROS2 version of VINS-MONO, mainly including the f
   * OpenCV 4.2.0
   * [Ceres Solver](http://ceres-solver.org/installation.html) 1.14.0
   * Eigen 3.3.7
+
 # 3. Build VINS-MONO-ROS2
-Clone the repository and colcon build:  
+
+## Docker Setup
+Make sure to install:
+- [Docker](https://docs.docker.com/engine/install/ubuntu/)
+
+Then, clone this repository in a ROS2 workspace at a desired location on your computer.
+
+After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, edit the `DOCKERFILE` to update these lines:
+- `ARG USERNAME=`: Your username
+- `ARG USER_UID=`: Output of `echo $UID`
+- `ARG USER_GID=`: Output of `id -g`
+
+Edit the `enter_container.sh` script with the following paths:
+- `DATA_DIR=`: The directory where the any datasets are located
+- `ROS_WS_DIR=`: The directory of the ros workspace this repository is a part of
+
+Now, run the following commands:
 ```
-cd $(PATH_TO_YOUR_ROS2_WS)/src
-git clone https://github.com/dongbo19/VINS-MONO-ROS2.git
-cd ..
+build_container.sh
+run_container.sh
+```
+
+The rest of this README **assumes that you are inside the Docker container**. For easier debugging and use, its highly recommended to install the [VSCode Docker extension](https://code.visualstudio.com/docs/containers/overview), which allows you to start/stop the container and additionally attach VSCode to the container by right-clicking on the container and selecting `Attach Visual Studio Code`.
+
+# Build
+Next navigate to the root of your ROS workspace, and run the following commands:
+```
 colcon build
+source install/setup.bash
 ```
+
+Finally, install the python dependencies (for WandB sweeps) with the following commands:
+```
+cd src/VINS-MONO-ROS2/dependencies/robotdataprocess/
+unset PYTHONPATH
+source /opt/miniconda3/bin/activate robotdataprocess
+pip install .
+```
+
+Then, kill the shell to deactivate the `robotdataprocess` environment.
+
 # 4. VINS-MONO-ROS2 on EuRoC datasets
 ## 4.1. ROS1 bag to ROS2 bag
 Download [EuRoC datasets](https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets). However, the datasets are in ROS1 format. To run the code in ROS2, we need to first convert these datasets to ROS2 format. We can use [rosbags](https://pypi.org/project/rosbags/) for this purpose, which can convert ROS built-in messages between ROS1 and ROS2.  
 ## 4.2. Visual-inertial odometry and loop closure
 All configuration files are in the package, **_config_pkg_**, so in launch files, the path to the EuRoC configuration files is found using **_get_package_share_directory('config_pkg')_**.  
-Open three terminals, launch the feature_tracker, vins_estimator, rviz2, and ros2 bag. Take the MH01 for example
+
+Then, navigate to this repositories folder and run the following command:
 ```
-ros2 launch feature_tracker vins_feature_tracker.launch.py              # for feature tracking and rviz2
-ros2 launch vins_estimator euroc.launch.py                              # for backend optimization and loop closure
-ros2 bag play $(PATH_TO_YOUR_DATASET)/MH_01_easy                        # for ros2 bag
+tmuxp load tmux/euroc.yaml
 ```
 ![mh05](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_mh05.gif)
 ![v101](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_v101.gif)
+
 ## 4.3. Visualize ground truch
 First, take the MH01 for example, modifying the **'sequence_name'** in the launch file: 
 **_benchmark_publisher/launch/benchmark_publisher.launch.py_**
@@ -55,15 +83,13 @@ sequence_name_arg = DeclareLaunchArgument(
 sequence_name = LaunchConfiguration('sequence_name')
 ```
 **PS: After modifying the launch file, don't forget to run **_colcon build_** for this package again.**  
-Then, open four terminals, launch the feature_tracker, vins_estimator, benchmark_mark, rviz2, and ros2 bag.
+Then, run the following command:
 ```
-ros2 launch feature_tracker vins_feature_tracker.launch.py            # for feature tracking and rviz2
-ros2 launch vins_estimator euroc.launch.py                            # for backend optimization and loop closure
-ros2 launch benchmark_publisher benchmark_publisher.launch.py         # for benchmark
-ros2 bag play $(PATH_TO_YOUR_DATASET)/MH_01_easy                      # for ros2 bag
+tmuxp load tmux/euroc_w_benchmark.yaml
 ```
 ![mh01_benchmark](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_benchmark_mh01.gif)
 ![mh02_benchmark](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_benchmark_mh02.gif)
+
 ## 4.4. AR Demo
 Download the [bag file](https://www.dropbox.com/scl/fi/q18lot4bfs1fqrctclz7b/ar_box.bag?rlkey=16yrxnwnt2fcutwwzwhlevd1n&e=1&dl=0).  
 Then open two terminals  
@@ -72,17 +98,67 @@ ros2 launch ar_demo 3dm_bag.launch.py               # for featuer tracking, back
 ros2 bag play $(PATH_TO_YOUR_DATASET)/ar_box        # for ros2 bag
 ```
 ![ar_demo](https://github.com/dongbo19/VINS-MONO-ROS2/blob/main/config_pkg/config/gif/vins_ros2_ar_demo.gif)
-# 5. Run your own datasets
-If you need to run your own collected datasets, please add your configuration files to the _config_pkg/config_ directory, and then modify the **_config_path_** in the launch files mentioned above to find your configuration file:  
-```
-config_path = PathJoinSubstitution([
-    config_pkg_path,
-    'config/$(YOUR_YAML_FILE)'
-])
-```
-**PS: After modifying the launch files or config files, don't forget to run **_colcon build_** for those packages again.**  
-# 6. Acknowledgements
-We use ros1 version of [VINS MONO](https://github.com/HKUST-Aerial-Robotics/VINS-Mono),  [ceres solver](http://ceres-solver.org/installation.html) for non-linear optimization, [DBoW2](https://github.com/dorian3d/DBoW2) for loop detection, and a generic [camera model](https://github.com/hengli/camodocal). Also, we referred to parts of the implementations from [VINS-FUSION-ROS2](https://github.com/zinuok/VINS-Fusion-ROS2) and [vins-mono-ros2](https://github.com/hitzzq/vins-mono-ros2).
 
-# 7. Licence
-The source code is released under [GPLv3](https://www.gnu.org/licenses/) license.
+# 5. VINS-MONO-ROS2 on GRaCo dataset
+
+Run the following command to run VINS-Mono on sequence Ground-04 of the [GRaCo](https://ieeexplore.ieee.org/abstract/document/10008011) Dataset:
+
+```
+tmuxp load ./src/VINS-MONO-ROS2/tmux/graco_ground4.yaml
+```
+
+For sequence Ground-05, run the following:
+```
+tmuxp load ./src/VINS-MONO-ROS2/tmux/graco_ground5.yaml
+```
+
+#### Note on Parameters
+
+In order to adapt GRaCo to work successfully with VINS-Mono, two types of parameters were changed:
+- 1. Robot parameters, or those that would always have to change due to differences in the robots/systems we are using. 
+- 2. Tunable parameters, or those that don't fall in the category above.
+
+Below we document all parameters that were changed in both categories 1 & 2:
+
+Category 1:
+```
+imu_topic, image_topic, output_path, image_width, image_height, distortion_parameters, projection_parameters, extrinsicRotation, extrinsicTranslation, acc_n, gyr_n, acc_w, gyr_w, pose_graph_save_path, support_path
+```
+
+Category 2:
+```
+loop_closure, freq
+```
+
+For reasons for changes in category 2, see the corresponding .yaml files.
+
+# 6. VINS-MONO-ROS2 on HERCULES Dataset (Australia Environment)
+
+First, absolute paths in files in `tmux/HERCULES/tmuxp_launch.py` and `config_pkg/config/hercules/` will need to be updated.
+
+Then, run the following command to run VINS-Mono on a robot trajectory for the HERCULES dataset:
+```
+source install/setup.bash
+python3 src/VINS-MONO-ROS2/tmux/HERCULES/tmuxp_launch.py <version_number> <robot_name> <use_rosbag_play>
+```
+
+To run a sweep of the IMU noise parameters, run the following commands:
+```
+source install/setup.bash
+wandb sweep -e <entity> -p <project> src/VINS-MONO-ROS2/research/sweep.yaml
+wandb agent '<entity>/<project>/<sweep_id>'
+```
+
+#### Note on Parameters
+
+Here are the parameters changed in categories 1 & 2 (referring to same categories from GRaCo dataset in Section 5 above):
+
+Category 1:
+```
+imu_topic, image_topic, output_path, distortion_parameters, projection_parameters, extrinsicRotation, extrinsicTranslation, pose_graph_save_path, support_path
+```
+
+Category 2:
+```
+freq, loop_closure
+```

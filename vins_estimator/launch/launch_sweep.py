@@ -32,6 +32,17 @@ def generate_launch_description():
         'support_files'
     ])
 
+    # Sweepable parameters
+    acc_n_arg = DeclareLaunchArgument('acc_n')
+    gyr_n_arg = DeclareLaunchArgument('gyr_n')
+    acc_w_arg = DeclareLaunchArgument('acc_w')
+    gyr_w_arg = DeclareLaunchArgument('gyr_w')
+
+    acc_n = LaunchConfiguration('acc_n')
+    gyr_n = LaunchConfiguration('gyr_n')
+    acc_w = LaunchConfiguration('acc_w')
+    gyr_w = LaunchConfiguration('gyr_w')
+    
     # Define the vins_estimator node
     vins_estimator_node = Node(
         package='vins_estimator',
@@ -42,6 +53,10 @@ def generate_launch_description():
         parameters=[{
             'config_file': config_path,
             'vins_folder': vins_path,
+            'acc_n': acc_n,
+            'gyr_n': gyr_n,
+            'acc_w': acc_w,
+            'gyr_w': gyr_w
         }]
     )
 
@@ -64,6 +79,10 @@ def generate_launch_description():
 
     return LaunchDescription([
         config_path_arg,
+        acc_n_arg,
+        gyr_n_arg,
+        acc_w_arg,
+        gyr_w_arg,
         LogInfo(msg=['[vins estimator launch] config path: ', config_path]),
         LogInfo(msg=['[vins estimator launch] vins path: ', vins_path]),
         LogInfo(msg=['[vins estimator launch] support path: ', support_path]),
